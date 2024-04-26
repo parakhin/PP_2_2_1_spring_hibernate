@@ -34,14 +34,10 @@ public class UserDaoImp implements UserDao {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        TypedQuery<Car> carQuery = session.createQuery("from Car where model=:modelParam and series=:seriesParam");
-        carQuery.setParameter("modelParam", carModel);
-        carQuery.setParameter("seriesParam", carSeries);
-        Car car = carQuery.setMaxResults(1).getResultList().get(0);
-
-        TypedQuery<User> userQuery = session.createQuery("from User where car=:carParam");
-        userQuery.setParameter("carParam", car);
-        User user = userQuery.getResultList().get(0);
+        TypedQuery<User> userQuery = session.createQuery("from User where car.model = :modelParam and car.series=:seriesParam");
+        userQuery.setParameter("modelParam", carModel);
+        userQuery.setParameter("seriesParam", carSeries);
+        User user = userQuery.setMaxResults(1).getResultList().get(0);
 
         session.getTransaction().commit();
         return user;
